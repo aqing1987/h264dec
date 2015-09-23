@@ -17,7 +17,7 @@ int network_connect(const char *path)
         return 1;
     }
 
-    /* start with a clean address structure */
+        /* start with a clean address structure */
     memset(&address, 0, sizeof(struct sockaddr_un));
     address.sun_family = AF_UNIX;
     snprintf(address.sun_path, sizeof(address.sun_path), "%s", path);
@@ -25,10 +25,10 @@ int network_connect(const char *path)
     if(connect(socket_fd,
                (struct sockaddr *) &address,
                sizeof(struct sockaddr_un)) != 0)
-        {
-            printf("connect() failed\n");
-            return 1;
-        }
+    {
+        printf("connect() failed\n");
+        return 1;
+    }
 
     return socket_fd;
 }

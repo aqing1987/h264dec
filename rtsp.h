@@ -15,10 +15,10 @@
  * so the data contained is used for later PLAY commands
  */
 struct rtsp_session {
-  int socket;
-  char *stream;
+    int socket;
+    char *stream;
 
-  /* RTSP protocol stuff */
+        /* RTSP protocol stuff */
     unsigned int packetization; /* Packetization mode from SDP data */
     unsigned int cport_from;    /* client_port from */
     unsigned int cport_to;      /* client port to   */

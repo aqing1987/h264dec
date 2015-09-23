@@ -36,7 +36,7 @@ int streamer_prepare(const char *name,
     snprintf(path_sock, size, "/tmp/%s.h264s.sock", name);
     snprintf(path_meta, size, "/tmp/%s.h264s.meta", name);
 
-    /* write metadata file */
+        /* write metadata file */
     fd = open(path_meta, O_CREAT|O_WRONLY|O_TRUNC, 0666);
     if (fd <= 0) {
         ERR();
@@ -49,7 +49,7 @@ int streamer_prepare(const char *name,
     write(fd, pps, pps_len);
     close(fd);
 
-    /* create unix sock */
+        /* create unix sock */
     fd = net_unix_sock(path_sock);
 
     return fd;
@@ -68,7 +68,7 @@ int streamer_pipe_init(int pipefd[2])
     long pipe_max;
     char buf[size];
 
-    /* create pipe */
+        /* create pipe */
     ret = pipe(pipefd);
     if (ret != 0) {
         printf("Error: could not create streamer pipe\n");
@@ -76,11 +76,11 @@ int streamer_pipe_init(int pipefd[2])
         exit(EXIT_FAILURE);
     }
 
-    /* Set non blocking mode */
+        /* Set non blocking mode */
     net_sock_nonblock(pipefd[0]);
     net_sock_nonblock(pipefd[1]);
 
-    /* Get maximum pipe buffer size allowed by the kernel */
+        /* Get maximum pipe buffer size allowed by the kernel */
     fd = open("/proc/sys/fs/pipe-max-size", O_RDONLY);
     if (fd <= 0) {
         printf("Warning: could not open pipe-max-size");
@@ -179,28 +179,28 @@ pid_t streamer_loop(int server_fd)
 int streamer_write_h264_header(unsigned char *sps_dec, size_t sps_len,
                                unsigned char *pps_dec, size_t pps_len)
 {
-     uint8_t nal_header[4] = {0x00, 0x00, 0x00, 0x01};
+    uint8_t nal_header[4] = {0x00, 0x00, 0x00, 0x01};
 
-     /* [00 00 00 01] [SPS] */
-     write(stream_fs_fd, &nal_header, sizeof(nal_header));
-     write(stream_fs_fd, sps_dec, sps_len);
+        /* [00 00 00 01] [SPS] */
+    write(stream_fs_fd, &nal_header, sizeof(nal_header));
+    write(stream_fs_fd, sps_dec, sps_len);
 
-     /* [00 00 00 01] [PPS] */
-     write(stream_fs_fd, &nal_header, sizeof(nal_header));
-     write(stream_fs_fd, pps_dec, pps_len);
+        /* [00 00 00 01] [PPS] */
+    write(stream_fs_fd, &nal_header, sizeof(nal_header));
+    write(stream_fs_fd, pps_dec, pps_len);
 
-     return 0;
+    return 0;
 }
 
 /* write data to unix socket */
 int streamer_write(const void *buf, size_t count)
 {
-    /* write to file system debug file */
+        /* write to file system debug file */
     if (stream_dump) {
         write(stream_fs_fd, buf, count);
     }
 
-    /* write to pipe */
+        /* write to pipe */
     return write(stream_pipe[1], buf, count);
 }
 
@@ -208,7 +208,7 @@ int streamer_write_nal()
 {
     uint8_t nal_header[4] = {0x00, 0x00, 0x00, 0x01};
 
-    /* write header to file system debug file */
+        /* write header to file system debug file */
     if (stream_dump) {
         write(stream_fs_fd, &nal_header, sizeof(nal_header));
     }

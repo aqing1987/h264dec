@@ -45,80 +45,80 @@ void banner()
 
 int main(int argc, char **argv)
 {
-     int opt;
+    int opt;
 
-     /* defaults */
-     opt_stdout  = 0;
-     opt_verbose = 0;
-     opt_stream = NULL;
-     opt_name = NULL;
-     stream_port = RTSP_PORT;
-     client_port = RTSP_CLIENT_PORT;
-     stream_dump = NULL;
+        /* defaults */
+    opt_stdout  = 0;
+    opt_verbose = 0;
+    opt_stream = NULL;
+    opt_name = NULL;
+    stream_port = RTSP_PORT;
+    client_port = RTSP_CLIENT_PORT;
+    stream_dump = NULL;
 
-     static const struct option long_opts[] = {
-         { "stdout",  no_argument      , NULL, 'o' },
-         { "dump",    required_argument, NULL, 'd' },
-         { "stream",  required_argument, NULL, 's' },
-         { "port",    required_argument, NULL, 'p' },
-         { "name",    required_argument, NULL, 'n' },
-         { "version", no_argument,       NULL, 'v' },
-         { "verbose", no_argument,       NULL, 'V' },
-         { "help",    no_argument,       NULL, 'h' },
-         { NULL, 0, NULL, 0 }
-     };
+    static const struct option long_opts[] = {
+        { "stdout",  no_argument      , NULL, 'o' },
+        { "dump",    required_argument, NULL, 'd' },
+        { "stream",  required_argument, NULL, 's' },
+        { "port",    required_argument, NULL, 'p' },
+        { "name",    required_argument, NULL, 'n' },
+        { "version", no_argument,       NULL, 'v' },
+        { "verbose", no_argument,       NULL, 'V' },
+        { "help",    no_argument,       NULL, 'h' },
+        { NULL, 0, NULL, 0 }
+    };
 
-     while ((opt = getopt_long(argc, argv, "od:s:p:n:vVh",
-                               long_opts, NULL)) != -1) {
-         switch (opt) {
-         case 'o':
-             opt_stdout = 1;
-             break;
-         case 'd':
-             stream_dump = strdup(optarg);
-             break;
-         case 's':
-             opt_stream = strdup(optarg);
-             break;
-         case 'p':
-             client_port = atoi(optarg);
-             break;
-         case 'n':
-             opt_name = strdup(optarg);
-             break;
-         case 'v':
-             banner();
-             exit(EXIT_SUCCESS);
-         case 'V':
-             opt_verbose = 1;
-             break;
-         case 'h':
-             help(EXIT_SUCCESS);
-         case '?':
-             help(EXIT_FAILURE);
-         }
-     }
-
-
-     if (!opt_stream || strncmp(opt_stream, PROTOCOL_PREFIX,
-                                sizeof(PROTOCOL_PREFIX) - 1) != 0) {
-         printf("Error: Invalid stream input.\n\n");
-         help(EXIT_FAILURE);
-     }
-
-     if (!opt_name) {
-         printf("Error: Local channel name not specified.\n\n");
-         help(EXIT_FAILURE);
-     }
-
-     /* RTSP loop */
-     while (1) {
-         rtsp_loop();
-         printf("[ERROR] RTSP Loop stopped, waiting 5 seconds...\n");
-         sleep(5);
-         exit(1);
-     }
+    while ((opt = getopt_long(argc, argv, "od:s:p:n:vVh",
+                              long_opts, NULL)) != -1) {
+        switch (opt) {
+        case 'o':
+            opt_stdout = 1;
+            break;
+        case 'd':
+            stream_dump = strdup(optarg);
+            break;
+        case 's':
+            opt_stream = strdup(optarg);
+            break;
+        case 'p':
+            client_port = atoi(optarg);
+            break;
+        case 'n':
+            opt_name = strdup(optarg);
+            break;
+        case 'v':
+            banner();
+            exit(EXIT_SUCCESS);
+        case 'V':
+            opt_verbose = 1;
+            break;
+        case 'h':
+            help(EXIT_SUCCESS);
+        case '?':
+            help(EXIT_FAILURE);
+        }
+    }
 
 
-     return 0;
+    if (!opt_stream || strncmp(opt_stream, PROTOCOL_PREFIX,
+                               sizeof(PROTOCOL_PREFIX) - 1) != 0) {
+        printf("Error: Invalid stream input.\n\n");
+        help(EXIT_FAILURE);
+    }
+
+    if (!opt_name) {
+        printf("Error: Local channel name not specified.\n\n");
+        help(EXIT_FAILURE);
+    }
+
+        /* RTSP loop */
+    while (1) {
+        rtsp_loop();
+        printf("[ERROR] RTSP Loop stopped, waiting 5 seconds...\n");
+        sleep(5);
+        exit(1);
+    }
+
+
+    return 0;
 }

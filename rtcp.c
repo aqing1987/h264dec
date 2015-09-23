@@ -37,7 +37,7 @@ uint32_t rtcp_dlsr()
 
     gettimeofday(&now,NULL);
     delay= (now.tv_sec - rtp_st.last_rcv_SR_time.tv_sec) +
-           ((now.tv_usec - rtp_st.last_rcv_SR_time.tv_usec)*1e-6);
+        ((now.tv_usec - rtp_st.last_rcv_SR_time.tv_usec)*1e-6);
     delay= (delay * 65536);
     rtp_st.delay_snc_last_SR = (uint32_t) delay;
     return rtp_st.delay_snc_last_SR;
@@ -70,16 +70,16 @@ struct rtcp_pkg *rtcp_decode(unsigned char *payload,
     *count = 0;
     gettimeofday(&now, NULL);
 
-    /*
-     * We define a maximum of 16 RTCP packets to decode, rarely
-     * we will have more than two.
-     */
+        /*
+         * We define a maximum of 16 RTCP packets to decode, rarely
+         * we will have more than two.
+         */
     struct rtcp_pkg *pk = malloc(sizeof(struct rtcp_pkg) * 16);
 
     while (i < len) {
         start = i;
 
-        /* Decode RTCP */
+            /* Decode RTCP */
         pk[idx].version   = (payload[i] >> 6);
         pk[idx].padding   = (payload[i] & 0x20) >> 5;
         pk[idx].extension = (payload[i] & 0x10) >> 4;
@@ -88,7 +88,7 @@ struct rtcp_pkg *rtcp_decode(unsigned char *payload,
         i++;
         pk[idx].type      = (payload[i]);
 
-        /* length */
+            /* length */
         i++;
         pk[idx].length    = (payload[i] * 256);
         i++;
@@ -104,56 +104,56 @@ struct rtcp_pkg *rtcp_decode(unsigned char *payload,
                    pk[idx].length, (pk[idx].length + 1) * 4);
         }
 
-        /* server report */
+            /* server report */
         if (pk[idx].type == RTCP_SR) {
             pk[idx].ssrc    = (
-                               (payload[i + 4]) |
-                               (payload[i + 3] <<  8) |
-                               (payload[i + 2] << 16) |
-                               (payload[i + 1] << 24)
+                (payload[i + 4]) |
+                (payload[i + 3] <<  8) |
+                (payload[i + 2] << 16) |
+                (payload[i + 1] << 24)
                                );
 
-            /* NTP time */
+                /* NTP time */
             pk[idx].ts_msw  =  (
-                                (payload[i + 8]) |
-                                (payload[i + 7] <<  8) |
-                                (payload[i + 6] << 16) |
-                                (payload[i + 5] << 24)
+                (payload[i + 8]) |
+                (payload[i + 7] <<  8) |
+                (payload[i + 6] << 16) |
+                (payload[i + 5] << 24)
                                 );
 
             pk[idx].ts_lsw  =  (
-                                (payload[i + 12]) |
-                                (payload[i + 11] <<  8) |
-                                (payload[i + 10] << 16) |
-                                (payload[i +  9] << 24)
+                (payload[i + 12]) |
+                (payload[i + 11] <<  8) |
+                (payload[i + 10] << 16) |
+                (payload[i +  9] << 24)
                                 );
 
-            /* RTP timestamp */
+                /* RTP timestamp */
             pk[idx].ts_rtp  =  (
-                                (payload[i + 16]) |
-                                (payload[i + 15] <<  8) |
-                                (payload[i + 14] << 16) |
-                                (payload[i + 13] << 24)
+                (payload[i + 16]) |
+                (payload[i + 15] <<  8) |
+                (payload[i + 14] << 16) |
+                (payload[i + 13] << 24)
                                 );
 
             pk[idx].sd_pk_c =  (
-                                (payload[i + 20]) |
-                                (payload[i + 19] <<  8) |
-                                (payload[i + 18] << 16) |
-                                (payload[i + 17] << 24)
+                (payload[i + 20]) |
+                (payload[i + 19] <<  8) |
+                (payload[i + 18] << 16) |
+                (payload[i + 17] << 24)
                                 );
 
             pk[idx].sd_pk_c =  (
-                                (payload[i + 24]) |
-                                (payload[i + 23] <<  8) |
-                                (payload[i + 22] << 16) |
-                                (payload[i + 21] << 24)
+                (payload[i + 24]) |
+                (payload[i + 23] <<  8) |
+                (payload[i + 22] << 16) |
+                (payload[i + 21] << 24)
                                 );
             i += 24;
 
-            /* last SR */
+                /* last SR */
             rtp_st.last_rcv_SR_ts = ((pk[idx].ts_msw & 0xFFFF) << 16) |
-                                     (pk[idx].ts_lsw >> 16);
+                (pk[idx].ts_lsw >> 16);
 
             rtp_st.last_rcv_SR_time.tv_sec  = now.tv_sec;
             rtp_st.last_rcv_SR_time.tv_usec = now.tv_usec;
@@ -175,13 +175,13 @@ struct rtcp_pkg *rtcp_decode(unsigned char *payload,
 
 
         }
-        /* source definition */
+            /* source definition */
         else if (pk[idx].type == RTCP_SDES) {
             pk[idx].identifier = (
-                                  (payload[i + 4]) |
-                                  (payload[i + 3] <<  8) |
-                                  (payload[i + 2] << 16) |
-                                  (payload[i + 1] << 24)
+                (payload[i + 4]) |
+                (payload[i + 3] <<  8) |
+                (payload[i + 2] << 16) |
+                (payload[i + 1] << 24)
                                   );
             i += 5;
             pk[idx].sdes_type = payload[i];
@@ -189,10 +189,10 @@ struct rtcp_pkg *rtcp_decode(unsigned char *payload,
             i++;
             pk[idx].sdes_length = payload[i];
 
-            /* we skip the source name, we dont need it */
+                /* we skip the source name, we dont need it */
             i += pk[idx].sdes_length;
 
-            /* end ? */
+                /* end ? */
             i++;
             pk[idx].sdes_type2 = payload[i];
 
@@ -203,7 +203,7 @@ struct rtcp_pkg *rtcp_decode(unsigned char *payload,
                 printf("     Length   : %i\n", pk[idx].sdes_length);
                 printf("     Type 2   : %i\n", pk[idx].sdes_type2);
             }
-       }
+        }
 
         if (debug_rtcp) {
             printf("     Len Check: ");
@@ -218,7 +218,7 @@ struct rtcp_pkg *rtcp_decode(unsigned char *payload,
                 printf("OK\n");
             }
         }
-        /* Discard packet */
+            /* Discard packet */
         else {
             i += pk[idx].length;
         }
@@ -238,19 +238,19 @@ int rtcp_receiver_report_zero(int fd)
     uint16_t tmp_16;
     uint32_t tmp_32;
 
-    /* RTCP: version, padding, report count = 0; int = 128 ; hex = 0x80 */
+        /* RTCP: version, padding, report count = 0; int = 128 ; hex = 0x80 */
     tmp_8 = 0x80;
     send(fd, &tmp_8, 1, 0);
 
-    /* RTCP: packet type - receiver report */
+        /* RTCP: packet type - receiver report */
     tmp_8 = RTCP_RR;
     send(fd, &tmp_8, 1, 0);
 
-    /* RTCP: length */
+        /* RTCP: length */
     tmp_16 = 0x01;
     net_send16(fd, tmp_16);
 
-    /* RTCP: sender SSRC */
+        /* RTCP: sender SSRC */
     tmp_32 = RTCP_SSRC;
     net_send32(fd, tmp_32);
 
@@ -266,35 +266,35 @@ int rtcp_receiver_report(int fd)
     struct timeval now;
     gettimeofday(&now, NULL);
 
-    /* RTCP: version, padding, report count; int = 129 ; hex = 0x81 */
+        /* RTCP: version, padding, report count; int = 129 ; hex = 0x81 */
     tmp_8 = 0x81;
     send(fd, &tmp_8, 1, 0);
 
-    /* RTCP: packet type - receiver report */
+        /* RTCP: packet type - receiver report */
     tmp_8 = RTCP_RR;
     send(fd, &tmp_8, 1, 0);
 
-    /* RTCP: length */
+        /* RTCP: length */
     tmp_16 = 0x07;
     net_send16(fd, tmp_16);
 
-    /* RTCP: sender SSRC */
+        /* RTCP: sender SSRC */
     tmp_32 = RTCP_SSRC;
     net_send32(fd, tmp_32);
 
-    /* RTCP: Source 1: Identifier */
+        /* RTCP: Source 1: Identifier */
     net_send32(fd, rtp_st.rtp_identifier);
 
-    /*
-     * Calcs for expected and lost packets
-     */
+        /*
+         * Calcs for expected and lost packets
+         */
     uint32_t extended_max;
     uint32_t expected;
     extended_max = rtp_st.rtp_received + rtp_st.highest_seq;
     expected = extended_max - rtp_st.first_seq + 1;
     rtp_st.rtp_cum_lost = expected - rtp_st.rtp_received - 1;
 
-    /* Fraction */
+        /* Fraction */
     uint32_t expected_interval;
     uint32_t received_interval;
     uint32_t lost_interval;
@@ -309,30 +309,30 @@ int rtcp_receiver_report(int fd)
     if (expected_interval == 0 || lost_interval <= 0) fraction = 0;
     else fraction = (lost_interval << 8) / expected_interval;
 
-    /* RTCP: SSRC Contents: Fraction lost */
-    //send(fd, &fraction, sizeof(fraction), 0);
+        /* RTCP: SSRC Contents: Fraction lost */
+        //send(fd, &fraction, sizeof(fraction), 0);
 
     tmp_32 = 0;//(fraction << 24) | ((rtp_st.rtp_cum_lost ) & 0xFFFFFF);
     net_send32(fd, tmp_32);
-    /* RTCP: SSRC Contents: Cumulative packet losts */
-    //net_send24(fd, rtp_st.rtp_cum_lost);
+        /* RTCP: SSRC Contents: Cumulative packet losts */
+        //net_send24(fd, rtp_st.rtp_cum_lost);
 
-    /* RTCP: SSRC Contents: Extended highest sequence */
+        /* RTCP: SSRC Contents: Extended highest sequence */
     tmp_16 = 1;// FIXME!??? rtp_st.rtp_received;
     net_send16(fd, tmp_16);
     tmp_16 = rtp_st.highest_seq;
     net_send16(fd, tmp_16);
 
-    /* RTCP: SSRC Contents: interarrival jitter */
+        /* RTCP: SSRC Contents: interarrival jitter */
     tmp_32 = rtcp_jitter();
     net_send32(fd, tmp_32);
     rtp_stats_print();
 
-    /* RTCP: SSRC Contents: Last SR timestamp */
+        /* RTCP: SSRC Contents: Last SR timestamp */
     tmp_32 = rtp_st.last_rcv_SR_ts;
     net_send32(fd, tmp_32);
 
-    /* RTCP: SSRC Contents: Timestamp delay */
+        /* RTCP: SSRC Contents: Timestamp delay */
     uint32_t dlsr = rtcp_dlsr();
     net_send32(fd, dlsr);
 
@@ -345,34 +345,34 @@ int rtcp_receiver_desc(int fd)
     uint16_t tmp_16;
     uint32_t tmp_32;
 
-    /* RTCP: version, padding, report count; int = 129 ; hex = 0x81 */
+        /* RTCP: version, padding, report count; int = 129 ; hex = 0x81 */
     tmp_8 = 0x81;
     send(fd, &tmp_8, 1, 0);
 
-    /* RTCP: packet type - source description */
+        /* RTCP: packet type - source description */
     tmp_8 = RTCP_SDES;
     send(fd, &tmp_8, 1, 0);
 
-    /* RTCP: length */
+        /* RTCP: length */
     tmp_16 = 0x04; /* 11 bytes */
     net_send16(fd, tmp_16);
 
-    /* RTCP: Source 1: Identifier */
+        /* RTCP: Source 1: Identifier */
     tmp_32 = RTCP_SSRC;
     net_send32(fd, tmp_32);
 
-    /* RTCP: SDES: Type CNAME = 1 */
+        /* RTCP: SDES: Type CNAME = 1 */
     tmp_8 = 0x1;
     send(fd, &tmp_8, 1, 0);
 
-    /* RTCP: SDES: Length */
+        /* RTCP: SDES: Length */
     tmp_8 = 0x6;
     send(fd, &tmp_8, 1, 0);
 
-    /* RTCP: SDES: Text (name string) */
+        /* RTCP: SDES: Text (name string) */
     send(fd, "monkey", 6, 0);
 
-    /* RTCP: SDES: END */
+        /* RTCP: SDES: END */
     tmp_8 = 0x0;
     send(fd, &tmp_8, 1, 0);
 
@@ -384,7 +384,7 @@ void *_rtcp_worker(void *arg)
     int fd = (int) arg;
 
     return;
-    //sleep(1);
+        //sleep(1);
     while (1) {
         rtsp_rtcp_reports(fd);
         sleep(5);

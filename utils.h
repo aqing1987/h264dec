@@ -27,14 +27,14 @@
 
 /* Debug macros */
 #define DEBUG_REQ(...)  if (opt_verbose) {      \
-  printf(REQ_HEADER);                           \
-  printf(__VA_ARGS__);                          \
-  printf(ANSI_RESET "\n");}
+        printf(REQ_HEADER);                     \
+        printf(__VA_ARGS__);                    \
+        printf(ANSI_RESET "\n");}
 
-#define DEBUG_RES(...)  if (opt_verbose) {                              \
-    printf(RES_HEADER);                                                 \
-    printf(__VA_ARGS__);                                                \
-    printf(ANSI_RESET "\n");}
+#define DEBUG_RES(...)  if (opt_verbose) {      \
+        printf(RES_HEADER);                     \
+        printf(__VA_ARGS__);                    \
+        printf(ANSI_RESET "\n");}
 
 #define RTSP_INFO(...) printf(ANSI_BOLD "[RTSP] " ANSI_RESET);  \
     printf(__VA_ARGS__);

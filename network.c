@@ -111,14 +111,14 @@ int net_unix_sock(const char *path)
     size_t address_length;
     struct sockaddr_un address;
 
-    /* Create listening socket */
+        /* Create listening socket */
     server_fd = socket(PF_UNIX, SOCK_STREAM, 0);
     if (server_fd < 0) {
         perror("socket() failed");
         exit(EXIT_FAILURE);
     }
 
-    /* just in case, remove previous sock */
+        /* just in case, remove previous sock */
     unlink(path);
 
     address.sun_family = AF_UNIX;
@@ -145,7 +145,7 @@ int net_sock_nonblock(int sockfd)
         return -1;
     }
 
-   return 0;
+    return 0;
 }
 
 

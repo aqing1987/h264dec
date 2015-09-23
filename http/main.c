@@ -19,14 +19,14 @@ DUDA_REGISTER("Duda HTTP Service", "H264 Streamer");
 /* List channels available */
 void cb_list(duda_request_t *dr)
 {
-    /*
-     * Channels are registered into the filesystem under
-     * the '/tmp' directory, format is the following:
-     *
-     * - Each channel must have two files:
-     *   - Metadata file (stream header SPS PSP): channel_name.h264st.meta
-     *   - Unix socket file: channel_name.h264st.sock
-     */
+        /*
+         * Channels are registered into the filesystem under
+         * the '/tmp' directory, format is the following:
+         *
+         * - Each channel must have two files:
+         *   - Metadata file (stream header SPS PSP): channel_name.h264st.meta
+         *   - Unix socket file: channel_name.h264st.sock
+         */
 
     unsigned int offset;
     DIR *dir;
@@ -45,7 +45,7 @@ void cb_list(duda_request_t *dr)
             continue;
         }
 
-        /* Look just for regular files and socket */
+            /* Look just for regular files and socket */
         if (ent->d_type != DT_REG && ent->d_type != DT_SOCK) {
             continue;
         }
@@ -88,10 +88,10 @@ void cb_play(duda_request_t *dr)
     struct stat st;
     const char *base_url = "/h264streamer/play/";
 
-    /*
-     * Get channel name
-     *
-     */
+        /*
+         * Get channel name
+         *
+         */
     s = (dr->sr->uri.len - strlen(base_url));
 
     if (s < 1) {
@@ -103,45 +103,45 @@ void cb_play(duda_request_t *dr)
     strncpy(channel, dr->sr->uri.data + strlen(base_url), s);
     channel[s] = '\0';
 
-    /* file sock */
+        /* file sock */
     s = strlen(CH_ROOT) + strlen(CH_SOCK) + strlen(channel) + 1;
     file_sock = malloc(s);
     snprintf(file_sock, s, "%s%s%s", CH_ROOT, channel, CH_SOCK);
 
-    /* file meta */
+        /* file meta */
     file_meta = malloc(s);
     snprintf(file_meta, s, "%s%s%s", CH_ROOT, channel, CH_META);
 
-    /* validate meta data file */
+        /* validate meta data file */
     if (stat(file_meta, &st) != 0) {
         response->http_status(dr, 400);
         response->printf(dr, "Invalid channel");
         response->end(dr, NULL);
     }
 
-    /* read meta header */
+        /* read meta header */
     h264_header = malloc(st.st_size);
     fd = open(file_meta, O_RDONLY);
     read(fd, h264_header, st.st_size);
     close(fd);
 
-    /* response headers */
+        /* response headers */
     response->http_status(dr, 200);
     response->http_content_length(dr, -1);
     response->http_header(dr, HTTP_CONTENT_TYPE_H264);
     response->http_header(dr, HTTP_CHUNKED_TE);
     response->send_headers(dr);
 
-    /* meta */
+        /* meta */
     len = snprintf(chunk, size, "%X\r\n", (int) st.st_size);
     response->print(dr, chunk, len);
     response->print(dr, h264_header, st.st_size);
     response->flush(dr);
 
-    //send(dr->cs->socket, chunk, len, 0);
-    //send(dr->cs->socket, h264_header, st.st_size, 0);
+        //send(dr->cs->socket, chunk, len, 0);
+        //send(dr->cs->socket, h264_header, st.st_size, 0);
 
-    /* Connect to the decoded h264 video stream */
+        /* Connect to the decoded h264 video stream */
     int stream = -1;
     while (stream == -1) {
         stream = network_connect(file_sock);
@@ -159,11 +159,11 @@ void cb_play(duda_request_t *dr)
 
         chunk_len = snprintf(chunk, size, "%X\r\n", len);
 
-        /*
-        response->print(dr, chunk, chunk_len);
-        response->print(dr, raw, len);
-        response->flush(dr);
-        */
+            /*
+              response->print(dr, chunk, chunk_len);
+              response->print(dr, raw, len);
+              response->flush(dr);
+            */
         int r;
 
         r = send(dr->cs->socket, chunk, chunk_len, 0);
@@ -190,7 +190,7 @@ void cb_play(duda_request_t *dr)
         len = response->flush(dr);
         printf(" BYTES SENT: %i\n", len);
     }
-    //response->end(dr, NULL);
+        //response->end(dr, NULL);
 }
 
 int duda_main()

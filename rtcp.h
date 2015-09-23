@@ -16,30 +16,30 @@
 #define RTCP_SSRC   0x0c143e07
 
 struct rtcp_pkg {
-  /* packet header */
-  uint8_t  version;
-  uint8_t  padding;
-  uint8_t  extension;
-  uint8_t  ccrc;
-  uint8_t  type;
-  uint16_t length;
+        /* packet header */
+    uint8_t  version;
+    uint8_t  padding;
+    uint8_t  extension;
+    uint8_t  ccrc;
+    uint8_t  type;
+    uint16_t length;
 
-  /* server report */
-  uint32_t ssrc;
-  uint32_t ts_msw;
-  uint32_t ts_lsw;
-  uint32_t ts_rtp;
-  uint32_t sd_pk_c;
-  uint32_t sd_oc_c;
+        /* server report */
+    uint32_t ssrc;
+    uint32_t ts_msw;
+    uint32_t ts_lsw;
+    uint32_t ts_rtp;
+    uint32_t sd_pk_c;
+    uint32_t sd_oc_c;
 
-  /* source definition */
-  uint32_t identifier;
-  uint8_t  sdes_type;
-  uint8_t  sdes_length;
-  uint16_t sdes_text;
-  uint8_t  sdes_type2;
+        /* source definition */
+    uint32_t identifier;
+    uint8_t  sdes_type;
+    uint8_t  sdes_length;
+    uint16_t sdes_text;
+    uint8_t  sdes_type2;
 
-  /* internal / informational */
+        /* internal / informational */
 };
 
 int debug_rtcp;
